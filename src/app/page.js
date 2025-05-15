@@ -54,13 +54,15 @@ export default function Home() {
         <div className="mt-6 p-4 border rounded bg-gray-50">
           <h2 className="font-semibold text-lg mb-2">Distortions Found:</h2>
           <ul className="space-y-2">
-            {result.results.map(({ input, prediction, confidence }, idx) => (
+            {result.results.map(({ input, prediction, confidence }, id) => (
               <li
-                key={idx}
+                key={id}
                 className="border-l-4 pl-3 border-blue-500 bg-white p-2 shadow-sm rounded"
               >
                 <p className="text-gray-800">
-                  <span className="font-medium text-black">"{input}"</span>
+                  <span className="font-medium text-black">
+                    &quot;{input}&quot;
+                  </span>
                 </p>
                 <p className="text-sm text-gray-600">
                   → {prediction} ({(confidence * 100).toFixed(1)}% confidence)
