@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🧠 AI Journaling App – Cognitive Distortion Analyzer
 
-## Getting Started
+This is a journaling web app that helps users become more aware of their negative thinking patterns. It uses a **fine-tuned Cohere Classify model** to detect **cognitive distortions** like Overgeneralization, Mind Reading, and All-or-Nothing Thinking.
 
-First, run the development server:
+Built with [Next.js 13+ (App Router)](https://nextjs.org/) and Cohere's V2 API.
 
+---
+
+## ✨ Features
+
+- 📝 Type or paste in a journal entry
+- ✂️ Automatically splits your entry into individual sentences
+- 🧠 Detects the **most likely cognitive distortion** per sentence
+- 📊 Shows top predictions + confidence scores
+- ⚡ Real-time results powered by a fine-tuned [Cohere](https://cohere.com) model
+
+---
+
+## 🚀 Getting Started
+
+### 1. Clone this repo
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+git clone https://github.com/your-username/your-repo-name.git
+cd your-repo-name
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**### 2.  Install dependencies**
+```bash
+npm install
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+**### 3. Set up your .env.local**
+Create a .env.local file in the root with your Cohere API key:
+```bash
+COHERE_API_KEY=your-cohere-api-key
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+You can get your key at dashboard.cohere.com
 
-## Learn More
+---
+**## 🧠 Model Info**
 
-To learn more about Next.js, take a look at the following resources:
+This app uses a fine-tuned Cohere Classify model, trained on 40+ examples across 9 cognitive distortions:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- All-or-Nothing Thinking
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Overgeneralization
 
-## Deploy on Vercel
+- Emotional Reasoning
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Labeling
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Should Statements
+
+- Mind Reading
+
+- Disqualifying the Positive
+
+- Mental Filtering
+
+- Jumping to Conclusions
+
+The model returns one prediction per sentence alongside a confidence score for the prediction.
+
+---
+**## 🛣️ Next Steps (Ideas)**
+- 📚 Show definitions + CBT-style reframes per distortion
+
+- 💾 Save journal entries to localStorage or Supabase
+
+- 🔒 Add authentication (Auth.js or Firebase)
+
+- 📈 Track progress over time with entry history
+
+---
+
+## 🧠 Why This Matters
+Cognitive distortions are automatic, negative thought patterns that reinforce anxiety, depression, and self-doubt. This tool helps you catch those thoughts in real time — and eventually reframe them.
