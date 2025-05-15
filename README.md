@@ -22,15 +22,17 @@ Built with [Next.js 13+ (App Router)](https://nextjs.org/) and Cohere's V2 API.
 ```bash
 git clone https://github.com/your-username/your-repo-name.git
 cd your-repo-name
-
+```
 **### 2.  Install dependencies**
 ```bash
 npm install
+```
 
 **### 3. Set up your .env.local**
 Create a .env.local file in the root with your Cohere API key:
 ```bash
 COHERE_API_KEY=your-cohere-api-key
+```
 
 You can get your key at dashboard.cohere.com
 
