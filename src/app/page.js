@@ -50,13 +50,24 @@ export default function Home() {
       >
         {loading ? "Analyzing..." : "Analyze"}
       </button>
-      {result && (
+      {result?.results && (
         <div className="mt-6 p-4 border rounded bg-gray-50">
-          <h2 className="font-semibold text-lg">Detected Distortion</h2>
-          <p className="text-xl mt-1">{result.prediction}</p>
-          <p className="text-sm text-gray-500">
-            Confidence: {(result.confidence * 100).toFixed(1)}%
-          </p>
+          <h2 className="font-semibold text-lg mb-2">Distortions Found:</h2>
+          <ul className="space-y-2">
+            {result.results.map(({ input, prediction, confidence }, idx) => (
+              <li
+                key={idx}
+                className="border-l-4 pl-3 border-blue-500 bg-white p-2 shadow-sm rounded"
+              >
+                <p className="text-gray-800">
+                  <span className="font-medium text-black">"{input}"</span>
+                </p>
+                <p className="text-sm text-gray-600">
+                  → {prediction} ({(confidence * 100).toFixed(1)}% confidence)
+                </p>
+              </li>
+            ))}
+          </ul>
         </div>
       )}
     </main>

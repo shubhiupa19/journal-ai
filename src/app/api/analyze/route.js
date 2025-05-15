@@ -12,58 +12,29 @@ export async function POST(request) {
   // specifically, pulls out they value from the key-val pair of "text" in the body
   const { text } = body;
 
-  // then, give some training labeled data of cognitive distortions to the cohere model
-  const examples = [
-    {
-      text: "I made a mistake, so I am a failure",
-      label: "All-or-Nothing Thinking",
-    },
-    {
-      text: "I am terrified of airplanes, so flying is dangerous",
-      label: "Emotional Reasoning",
-    },
-    {
-      text: "She's a bad person",
-      label: "Labeling",
-    },
-    {
-      text: "My boss said he liked my work, but since he didn't say it was perfect, I must be doing a terrible job",
-      label: "Mental Filtering",
-    },
-    {
-      text: "Every time I get the day off, it rains",
-      label: "Overgeneralization",
-    },
-    {
-      text: "I got the job, but I was just lucky",
-      label: "Disqualifying the Positive",
-    },
-    {
-      text: "I should have more friends by now",
-      label: "Should Statements",
-    },
-    {
-      text: "As soon as I saw him, I knew he had bad intentions",
-      label: "Jumping to Conclusions",
-    },
-    {
-      text: "He's thinking that I don't like him",
-      label: "Mind Reading",
-    },
-  ];
+  // splits text into sentences + removes whitespace, if necessary
+  const sentences = text.split(/(?<=[.!?])\s+/).map((s) => s.trim()).filter(Boolean);;
 
   // then, we call the classify function of the cohere model
 
-    const response = await cohere.classify({
-      model: "58a29f78-89a1-4619-9b0d-e81528ffaeee-ft",
-      inputs: [text],
-    });
-    console.log(
-      "The confidence levels of the labels are:",
-      response.classifications
-    );
- 
+  const response = await cohere.classify({
+    model: "58a29f78-89a1-4619-9b0d-e81528ffaeee-ft",
+    inputs: sentences,
+  });
+  console.log(
+    "The confidence levels of the labels are:",
+    response.classifications
+  );
 
   // then, we get the result of the classification
-  return NextResponse.json(response.classifications[0]);
+  return NextResponse.json({
+    // returns the result in an array of objects, each corresponding to a sentence
+    // each object is considered a classification and contains the input sentence, prediction, and confidence
+    // this entire array of objects is sent to the client
+    results: response.classifications.map((classification) => ({
+      input: classification.input,
+      prediction: classification.prediction,
+      confidence: classification.confidence,
+    })),
+  });
 }
