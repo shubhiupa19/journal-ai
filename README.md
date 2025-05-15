@@ -37,7 +37,7 @@ COHERE_API_KEY=your-cohere-api-key
 You can get your key at dashboard.cohere.com
 
 ---
-**## 🧠 Model Info**
+## 🧠 Model Info
 
 This app uses a fine-tuned Cohere Classify model, trained on 40+ examples across 9 cognitive distortions:
 
@@ -62,7 +62,7 @@ This app uses a fine-tuned Cohere Classify model, trained on 40+ examples across
 The model returns one prediction per sentence alongside a confidence score for the prediction.
 
 ---
-**## 🛣️ Next Steps (Ideas)**
+## 🛣️ Next Steps (Ideas)
 - 📚 Show definitions + CBT-style reframes per distortion
 
 - 💾 Save journal entries to localStorage or Supabase
