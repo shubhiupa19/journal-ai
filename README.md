@@ -1,5 +1,7 @@
 # 🧠 AI Journaling App – Cognitive Distortion Analyzer
 
+⚠️ This project was built using a fine-tuned Cohere Classify model prior to API deprecation in Sept 2025. The live endpoint is no longer available, but code remains as reference.
+
 This is a journaling web app that helps users become more aware of their negative thinking patterns. It uses a **fine-tuned Cohere Classify model** to detect **cognitive distortions** like Overgeneralization, Mind Reading, and All-or-Nothing Thinking.
 
 Built with [Next.js 13+ (App Router)](https://nextjs.org/) and Cohere's V2 API.
