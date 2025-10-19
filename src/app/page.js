@@ -21,8 +21,10 @@ export default function Home() {
   const analyzeText = async () => {
     // first, set loading to true
     setLoading(true);
+    // Use environment variable for API URL (defaults to localhost for development)
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:5000/predict";
     // then, make a POST request to the API
-    const res = await fetch("/api/analyze", {
+    const res = await fetch(apiUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -59,8 +61,8 @@ export default function Home() {
       </button>
       {result?.results && (
         <div className="mt-6 p-4 border rounded bg-gray-50">
-          <h2 className="font-semibold text-lg mb-2">Distortions Found:</h2>
-          <div className="bg-white p-4 rounded border text-lg leading-relaxed relative">
+          <h2 className="font-semibold text-lg mb-2">Analysis Results:</h2>
+          <div className="bg-white p-4 rounded border text-lg leading-relaxed relative mb-4">
             {DISTORTION_ORDER.map((distortionType) => {
               // Find sentences for this distortion type
               const matchingSentences = result.results
@@ -117,6 +119,13 @@ export default function Home() {
               </p>
             </div>
           )}
+
+          <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded">
+            <p className="text-sm text-yellow-800 italic">
+              ⚠️ Note: This model has ~34% accuracy and is for learning purposes only.
+              Predictions should not be taken as psychological advice.
+            </p>
+          </div>
         </div>
       )}
     </main>
