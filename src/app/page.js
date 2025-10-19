@@ -1,11 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import Highlighter from "react-highlight-words";
 import {
   DISTORTION_DATA,
   DISTORTION_COLORS,
-  DISTORTION_ORDER,
 } from "./constants/distortions";
 
 export default function Home() {
@@ -63,52 +61,41 @@ export default function Home() {
         <div className="mt-6 p-4 border rounded bg-gray-50">
           <h2 className="font-semibold text-lg mb-2">Analysis Results:</h2>
           <div className="bg-white p-4 rounded border text-lg leading-relaxed relative mb-4">
-            {/* Show original text if no distortions found */}
+            {/* Show original text if all predictions are "No Distortion" */}
             {result.results.every((r) => r.prediction === "No Distortion") ? (
               <p className="text-gray-700">{text}</p>
-            ) : null}
-            {DISTORTION_ORDER.map((distortionType) => {
-              // Find sentences for this distortion type
-              const matchingSentences = result.results
-                .filter((r) => r.prediction === distortionType)
-                .map((r) => r.input);
+            ) : (
+              /* Show text with highlighting for detected distortions */
+              <div>
+                {result.results.map((r, idx) => {
+                  const distortionType = r.prediction;
+                  const color = DISTORTION_COLORS[distortionType];
 
-              // If no sentences of this type, skip
-              if (matchingSentences.length === 0) return null;
+                  // If it's "No Distortion", just show plain text
+                  if (distortionType === "No Distortion") {
+                    return <span key={idx}>{r.input} </span>;
+                  }
 
-              // Get confidence for each sentence
-              const getConfidence = (sentence) => {
-                const match = result.results.find(
-                  (r) => r.input === sentence && r.prediction === distortionType
-                );
-                return match ? match.confidence : 0;
-              };
-
-              return (
-                <Highlighter
-                  key={distortionType}
-                  searchWords={matchingSentences}
-                  textToHighlight={text}
-                  highlightClassName={DISTORTION_COLORS[distortionType]}
-                  highlightTag={({ children }) => (
+                  // Otherwise, show highlighted with color
+                  return (
                     <span
-                      className={`${DISTORTION_COLORS[distortionType]} cursor-pointer rounded px-1`}
+                      key={idx}
+                      className={`${color} cursor-pointer rounded px-1`}
                       onMouseEnter={() =>
                         setHoveredInfo({
                           type: distortionType,
-                          confidence: getConfidence(children),
-                          definition:
-                            DISTORTION_DATA[distortionType]?.definition,
+                          confidence: r.confidence,
+                          definition: DISTORTION_DATA[distortionType]?.definition,
                         })
                       }
                       onMouseLeave={() => setHoveredInfo(null)}
                     >
-                      {children}
+                      {r.input}{" "}
                     </span>
-                  )}
-                />
-              );
-            })}
+                  );
+                })}
+              </div>
+            )}
           </div>
           {hoveredInfo && (
             <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded">
