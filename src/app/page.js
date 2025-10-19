@@ -1,6 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import Highlighter from "react-highlight-words";
+import {
+  DISTORTION_DATA,
+  DISTORTION_COLORS,
+  DISTORTION_ORDER,
+} from "./constants/distortions";
 
 export default function Home() {
   // holds text input
@@ -9,6 +15,7 @@ export default function Home() {
   const [result, setResult] = useState(null);
   // tracks whether the app is currently waiting for a response from the API
   const [loading, setLoading] = useState(false);
+  const [hoveredInfo, setHoveredInfo] = useState(null);
 
   // handles what happens when the user clicks the "Analyze" button
   const analyzeText = async () => {
@@ -22,11 +29,11 @@ export default function Home() {
       },
       body: JSON.stringify({ text }),
     });
-
     // then, convert the response to JSON
     const data = await res.json();
     // then, set the result to the data we got from the API
     setResult(data);
+
     // finally, set loading to false
     setLoading(false);
   };
@@ -53,23 +60,63 @@ export default function Home() {
       {result?.results && (
         <div className="mt-6 p-4 border rounded bg-gray-50">
           <h2 className="font-semibold text-lg mb-2">Distortions Found:</h2>
-          <ul className="space-y-2">
-            {result.results.map(({ input, prediction, confidence }, id) => (
-              <li
-                key={id}
-                className="border-l-4 pl-3 border-blue-500 bg-white p-2 shadow-sm rounded"
-              >
-                <p className="text-gray-800">
-                  <span className="font-medium text-black">
-                    &quot;{input}&quot;
-                  </span>
-                </p>
-                <p className="text-sm text-gray-600">
-                  → {prediction} ({(confidence * 100).toFixed(1)}% confidence)
-                </p>
-              </li>
-            ))}
-          </ul>
+          <div className="bg-white p-4 rounded border text-lg leading-relaxed relative">
+            {DISTORTION_ORDER.map((distortionType) => {
+              // Find sentences for this distortion type
+              const matchingSentences = result.results
+                .filter((r) => r.prediction === distortionType)
+                .map((r) => r.input);
+
+              // If no sentences of this type, skip
+              if (matchingSentences.length === 0) return null;
+
+              // Get confidence for each sentence
+              const getConfidence = (sentence) => {
+                const match = result.results.find(
+                  (r) => r.input === sentence && r.prediction === distortionType
+                );
+                return match ? match.confidence : 0;
+              };
+
+              return (
+                <Highlighter
+                  key={distortionType}
+                  searchWords={matchingSentences}
+                  textToHighlight={text}
+                  highlightClassName={DISTORTION_COLORS[distortionType]}
+                  highlightTag={({ children }) => (
+                    <span
+                      className={`${DISTORTION_COLORS[distortionType]} cursor-pointer rounded px-1`}
+                      onMouseEnter={() =>
+                        setHoveredInfo({
+                          type: distortionType,
+                          confidence: getConfidence(children),
+                          definition:
+                            DISTORTION_DATA[distortionType]?.definition,
+                        })
+                      }
+                      onMouseLeave={() => setHoveredInfo(null)}
+                    >
+                      {children}
+                    </span>
+                  )}
+                />
+              );
+            })}
+          </div>
+          {hoveredInfo && (
+            <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded">
+              <h3 className="font-semibold text-blue-900">
+                {hoveredInfo.type}
+              </h3>
+              <p className="text-sm text-blue-700">
+                Confidence: {(hoveredInfo.confidence * 100).toFixed(1)}%
+              </p>
+              <p className="text-sm text-blue-800 mt-1">
+                {hoveredInfo.definition}
+              </p>
+            </div>
+          )}
         </div>
       )}
     </main>
