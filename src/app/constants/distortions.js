@@ -1,7 +1,7 @@
 // Definitions taken from : https://www.therapistaid.com/worksheets/cognitive-distortions, https://www.medicalnewstoday.com/articles/cognitive-distortions#types
 export const DISTORTION_DATA = {
-  "All-or-Nothing Thinking": {
-    definition: "Thinking in absolutes such as “always,” “never,” or “every.”",
+  "All-or-nothing thinking": {
+    definition: "Thinking in absolutes such as 'always,' 'never,' or 'every.'",
   },
   Overgeneralization: {
     definition: "Making broad interpretations from a single or few events",
@@ -12,50 +12,59 @@ export const DISTORTION_DATA = {
   },
   Labeling: {
     definition:
-      "Classifying onself or others in an entirely and absolutely negative way",
+      "Classifying oneself or others in an entirely and absolutely negative way",
   },
-  "Should Statements": {
+  "Should statements": {
     definition: "The belief that things should be a certain way",
   },
   "Mind Reading": {
     definition:
       "Interpreting the thoughts and beliefs of others without adequate evidence",
   },
-  "Disqualifying the Positive": {
+  Personalization: {
     definition:
-      "Recognizing only the negative aspects of a situation while ignoring the positive",
+      "Taking responsibility for events outside of your control or blaming yourself unnecessarily",
   },
-  "Mental Filtering": {
+  "Mental filter": {
     definition:
-      "Lingering and focusing on negative events or thoughts, even in the face of contradictory evidence",
+      "Focusing only on negative aspects while filtering out positive ones",
   },
-  "Jumping to Conclusions": {
+  "Fortune-telling": {
     definition:
-      "Interpreting the meaning of a situation with little or no evidence",
+      "Predicting negative outcomes without adequate evidence",
+  },
+  Magnification: {
+    definition:
+      "Exaggerating the importance of negative events or minimizing positive ones",
+  },
+  "No Distortion": {
+    definition:
+      "Healthy, balanced thinking without cognitive distortions",
   },
 };
 
 export const DISTORTION_ORDER = [
-  "All-or-Nothing Thinking",
+  "All-or-nothing thinking",
   "Overgeneralization",
   "Emotional Reasoning",
   "Labeling",
-  "Should Statements",
+  "Should statements",
   "Mind Reading",
-  "Disqualifying the Positive",
-  "Mental Filtering",
-  "Jumping to Conclusions",
+  "Personalization",
+  "Mental filter",
+  "Fortune-telling",
+  "Magnification",
 ];
 
 export const DISTORTION_COLORS = {
-  "All-or-Nothing Thinking": "bg-blue-100 hover:bg-blue-200 border-blue-300",
+  "All-or-nothing thinking": "bg-blue-100 hover:bg-blue-200 border-blue-300",
   Overgeneralization: "bg-indigo-100 hover:bg-indigo-200 border-indigo-300",
   "Mind Reading": "bg-purple-100 hover:bg-purple-200 border-purple-300",
   "Emotional Reasoning": "bg-violet-100 hover:bg-violet-200 border-violet-300",
   Labeling: "bg-cyan-100 hover:bg-cyan-200 border-cyan-300",
-  "Should Statements": "bg-teal-100 hover:bg-teal-200 border-teal-300",
-  "Disqualifying the Positive":
-    "bg-emerald-100 hover:bg-emerald-200 border-emerald-300",
-  "Mental Filtering": "bg-sky-100 hover:bg-sky-200 border-sky-300",
-  "Jumping to Conclusions": "bg-slate-100 hover:bg-slate-200 border-slate-300",
+  "Should statements": "bg-teal-100 hover:bg-teal-200 border-teal-300",
+  Personalization: "bg-pink-100 hover:bg-pink-200 border-pink-300",
+  "Mental filter": "bg-sky-100 hover:bg-sky-200 border-sky-300",
+  "Fortune-telling": "bg-amber-100 hover:bg-amber-200 border-amber-300",
+  Magnification: "bg-rose-100 hover:bg-rose-200 border-rose-300",
 };
