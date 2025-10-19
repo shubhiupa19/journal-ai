@@ -63,6 +63,10 @@ export default function Home() {
         <div className="mt-6 p-4 border rounded bg-gray-50">
           <h2 className="font-semibold text-lg mb-2">Analysis Results:</h2>
           <div className="bg-white p-4 rounded border text-lg leading-relaxed relative mb-4">
+            {/* Show original text if no distortions found */}
+            {result.results.every((r) => r.prediction === "No Distortion") ? (
+              <p className="text-gray-700">{text}</p>
+            ) : null}
             {DISTORTION_ORDER.map((distortionType) => {
               // Find sentences for this distortion type
               const matchingSentences = result.results
