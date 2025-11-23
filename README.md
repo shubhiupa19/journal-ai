@@ -1,4 +1,4 @@
-# 🧠 AI Journaling App – Cognitive Distortion Analyzer
+# AI Journaling App – Cognitive Distortion Analyzer
 
 This is a journaling web app that helps users become more aware of their negative thinking patterns. It uses a **machine learning model** to detect **cognitive distortions** like Overgeneralization, Mind Reading, and All-or-Nothing Thinking.
 
@@ -6,19 +6,19 @@ Built with [Next.js 13+ (App Router)](https://nextjs.org/) frontend and a Flask 
 
 ---
 
-## ✨ Features
+## Features
 
-- 📝 Type or paste in a journal entry
-- ✂️ Automatically splits your entry into individual sentences
-- 🧠 Detects the **most likely cognitive distortion** per sentence
-- 📊 Shows predictions with confidence scores
-- 🎨 Color-coded highlighting for each distortion type
-- 💡 Hover over highlighted text to see distortion definitions
-- ⚡ Real-time predictions using a locally-trained ML model
+- Type or paste in a journal entry
+- Automatically splits your entry into individual sentences
+- Detects the **most likely cognitive distortion** per sentence
+- Shows predictions with confidence scores
+- Color-coded highlighting for each distortion type
+- Hover over highlighted text to see distortion definitions
+- Real-time predictions using a locally-trained ML model
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### 1. Clone this repo
 ```bash
@@ -59,7 +59,7 @@ npm run dev
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
-## 🧠 Model Info
+## Model Info
 
 This app uses a **scikit-learn Pipeline** with:
 - **TF-IDF Vectorization** (unigrams + bigrams, 5000 max features)
@@ -94,25 +94,25 @@ This app uses a **scikit-learn Pipeline** with:
 The model analyzes each sentence independently and returns a prediction with a confidence score.
 
 ---
-## 🔮 Future AI Improvements
+## Future AI Improvements
 
 The original Kaggle dataset includes therapist responses and CBT-style reframes. Future versions could leverage this to:
 
-1. **🤖 Generate therapeutic reframes** - Fine-tune an LLM (GPT, Llama, Claude) on the patient-therapist pairs to provide personalized CBT responses
+1. ** Generate therapeutic reframes** - Fine-tune an LLM (GPT, Llama, Claude) on the patient-therapist pairs to provide personalized CBT responses
    - Example: "I always fail" → "You've succeeded at many things. Setbacks are part of learning and growth."
 
-2. **🎯 Multi-task learning** - Train a model to simultaneously classify distortions AND generate helpful reframes, improving both tasks
+2. ** Multi-task learning** - Train a model to simultaneously classify distortions AND generate helpful reframes, improving both tasks
 
-3. **📊 Improve classification accuracy** - Experiment with transformer models (BERT, RoBERTa) or collect more balanced training data to boost performance beyond 34%
+3. ** Improve classification accuracy** - Experiment with transformer models (BERT, RoBERTa) or collect more balanced training data to boost performance beyond 34%
 
 ---
 
-## 🧠 Why This Matters
+## Why This Matters
 Cognitive distortions are automatic, negative thought patterns that reinforce anxiety, depression, and self-doubt. This tool helps you catch those thoughts in real time — and eventually reframe them.
 
 ---
 
-## 📋 Tech Stack
+## Tech Stack
 
 **Frontend Frameworks and Libraries:**
 - Next.js 13+ (App Router)
@@ -128,5 +128,5 @@ Cognitive distortions are automatic, negative thought patterns that reinforce an
 
 ---
 
-## 📝 Note
+## Note
 Built as a personal learning project to explore ML classification with scikit-learn and Next.js. Runs locally with Flask backend + Next.js frontend.
