@@ -9,7 +9,7 @@ import {
 export default function Home() {
   // holds text input
   const [text, setText] = useState("");
-  // holds the result from the Cohere API
+  // holds the result from the API
   const [result, setResult] = useState(null);
   // tracks whether the app is currently waiting for a response from the API
   const [loading, setLoading] = useState(false);
@@ -20,9 +20,9 @@ export default function Home() {
     // first, set loading to true
     setLoading(true);
     // Use environment variable for API URL (defaults to localhost for development)
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:5000/predict";
+    const url = "api/analyze";    
     // then, make a POST request to the API
-    const res = await fetch(apiUrl, {
+    const res = await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

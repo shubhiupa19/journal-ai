@@ -3,13 +3,18 @@ from flask_cors import CORS
 import joblib
 import traceback
 import re
+from database import save_feedback, init_db
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for frontend requests
 
+# initalize db on startup of the backend
+init_db()
+
 # Load the trained model
 model = joblib.load("distortion_model.pkl")
 
+# route to call the model and predict CD's for each sentence
 @app.route("/predict", methods=["POST"])
 def predict():
     try:
@@ -44,5 +49,19 @@ def predict():
     except Exception as e:
         return jsonify({"error": str(e), "trace": traceback.format_exc()}), 500
 
+# route to post feedback to our SQL db
+@app.route("/feedback", methods=["POST"])
+def feedback():
+    data = request.get_json()
+    feedback_id = save_feedback(
+        text=data.get("text"),
+        predicted_distortion=data.get("predicted_distortion"),
+        user_correction=data.get("user_correction"),
+        is_accepted=data.get("is_accepted"),
+        confidence=data.get("confidence")
+    )
+
+    return jsonify("feedback row id: ", feedback_id)
+
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=5001)
