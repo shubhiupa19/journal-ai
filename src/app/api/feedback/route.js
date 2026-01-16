@@ -1,18 +1,17 @@
-import { NextResponse } from "next/server"l
+import { NextResponse } from "next/server";
 
 export async function POST(request) {
-    const body = await request.json();
+  const body = await request.json();
 
-    const url = `${process.env.BACKEND_URL}/feedback`;
+  const url = `${process.env.BACKEND_URL}/feedback`;
 
-    const response = await fetch(url, {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(body),
+  const response = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
 
-    });
+  const data = await response.json();
 
-    const data = await response.json();
-
-    return NextResponse.json(data);
+  return NextResponse.json(data);
 }
