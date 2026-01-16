@@ -15,6 +15,10 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [hoveredInfo, setHoveredInfo] = useState(null);
 
+  // tracks which sentences need feedback
+  const [selectedIdx, setSelectedIdx] = useState(null);
+  const [feedbackSent, setFeedbackSent] = useState({})
+
   // handles what happens when the user clicks the "Analyze" button
   const analyzeText = async () => {
     // first, set loading to true
@@ -37,6 +41,24 @@ export default function Home() {
     // finally, set loading to false
     setLoading(false);
   };
+
+  const sendFeedback = async(idx, isAccepted, correction=null) => {
+    const r = result.results[idx]
+    url = "api/feedback"
+    await fetch(url, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        text: r.input,
+        predicted_distortion: r.prediction,
+        user_correction: correction,
+        is_accepted: isAccepted,
+        confidence: r.confidence
+      }),
+    });
+    setFeedbackSent((prev) => ({...prev, [idx]: true}))
+    setSelectedIdx(null);
+  }
 
   // display the page
   return (
