@@ -54,6 +54,7 @@ export const DISTORTION_ORDER = [
   "Mental filter",
   "Fortune-telling",
   "Magnification",
+  "No Distortion"
 ];
 
 export const DISTORTION_COLORS = {
