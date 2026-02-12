@@ -1,13 +1,19 @@
 import { Inter } from "next/font/google";
-import { Playfair_Display } from "next/font/google";     
-  import { Nunito } from "next/font/google";     
+import { Playfair_Display } from "next/font/google";
+import { Nunito } from "next/font/google";
+import { Lora } from "next/font/google";  
+import { EB_Garamond } from "next/font/google";  
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"]});
+const inter = Inter({ subsets: ["latin"] });
 
-const font = Playfair_Display({ subsets: ["latin"] }); 
+const font = Playfair_Display({ subsets: ["latin"] });
 
-const nunito = Nunito({subsets: ["latin"]})
+const nunito = Nunito({ subsets: ["latin"] });
+
+const lora = Lora({subsets: ["latin"]})
+
+const eb_garamond = EB_Garamond({subsets: ["latin"]})
 
 export const metadata = {
   title: "AI Cognitive Distortion Analyzer",
@@ -17,9 +23,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={nunito.className}>
-        {children}
-      </body>
+      <body className={eb_garamond.className}>{children}</body>
     </html>
   );
 }

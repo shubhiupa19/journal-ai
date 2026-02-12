@@ -66,21 +66,21 @@ export default function Home() {
   // display the page
   return (
     <main className="p-6 max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4 text-center">
-        Cognitive Distortion Analyzer 
+      <h1 className="text-2xl font-bold mb-4 text-center text-stone-800">
+        Cognitive Distortion Analyzer
       </h1>
-      <p className="text-gray-500 mb-6 text-center">
+      <p className="text-stone-500 mb-6 text-center">
         Identify negative thinking patterns in your thoughts
       </p>
       <textarea
         value={text}
         onChange={(e) => setText(e.target.value)}
         rows={4}
-        className="w-full p-4 border border-gray-200 rounded-lg mb-4 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+        className="w-full p-4 border border-stone-200 rounded-lg mb-4 bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-stone-400 focus:border-transparen text-stone-800 leading-relaxed text-lg"
       />
       <button
         onClick={analyzeText}
-        className="bg-blue-600 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-blue-700 transition-colors shadow-sm"
+        className="bg-olive-green text-white px-6 py-2.5 rounded-lg font-medium hover:bg-olive-green-dark transition-colors shadow-sm"
       >
         {loading ? "Analyzing..." : "Analyze"}
       </button>
@@ -117,7 +117,9 @@ export default function Home() {
                         })
                       }
                       onMouseLeave={() => {
-                        if(selectedIdx === null) {setHoveredInfo(null)};
+                        if (selectedIdx === null) {
+                          setHoveredInfo(null);
+                        }
                       }}
                       onClick={() =>
                         setSelectedIdx(selectedIdx === idx ? null : idx)
