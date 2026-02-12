@@ -47,21 +47,26 @@ def predict():
         return jsonify({"results": results})
 
     except Exception as e:
-        return jsonify({"error": str(e), "trace": traceback.format_exc()}), 500
+        return (jsonify({"error": str(e)}), 500)
 
 # route to post feedback to our SQL db
 @app.route("/feedback", methods=["POST"])
 def feedback():
-    data = request.get_json()
-    feedback_id = save_feedback(
-        text=data.get("text"),
-        predicted_distortion=data.get("predicted_distortion"),
-        user_correction=data.get("user_correction"),
-        is_accepted=data.get("is_accepted"),
-        confidence=data.get("confidence")
-    )
+    try:
+        data = request.get_json()
+        feedback_id = save_feedback(
+            text=data.get("text"),
+            predicted_distortion=data.get("predicted_distortion"),
+            user_correction=data.get("user_correction"),
+            is_accepted=data.get("is_accepted"),
+            confidence=data.get("confidence")
+        )
+    except Exception as e:
+        return (jsonify({"error": str(e)}), 500)
+        
 
-    return jsonify("feedback row id: ", feedback_id)
+
+    return (jsonify({"feedback_id": feedback_id}))
 
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
