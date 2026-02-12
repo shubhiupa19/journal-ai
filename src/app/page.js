@@ -22,6 +22,11 @@ export default function Home() {
 
   // handles what happens when the user clicks the "Analyze" button
   const analyzeText = async () => {
+    // reset all of the states to their original state before new analysis
+    setResult(null);
+    setHoveredInfo(null);
+    setSelectedIdx(null);
+    setFeedbackSent({});
     // first, set loading to true
     setLoading(true);
     // Use environment variable for API URL (defaults to localhost for development)
@@ -88,26 +93,16 @@ export default function Home() {
         <div className="mt-6 p-5 border border-gray-200 rounded-xl bg-white shadow-md">
           <h2 className="font-semibold text-lg mb-2">Analysis Results:</h2>
           <div className="bg-white p-4 rounded border text-lg leading-relaxed relative mb-4">
-            {/* Show original text if all predictions are "No Distortion" */}
-            {result.results.every((r) => r.prediction === "No Distortion") ? (
-              <p className="text-gray-700">{text}</p>
-            ) : (
+            {
               /* Show text with highlighting for detected distortions */
               <div>
                 {result.results.map((r, idx) => {
                   const distortionType = r.prediction;
                   const color = DISTORTION_COLORS[distortionType];
-
-                  // If it's "No Distortion", just show plain text
-                  if (distortionType === "No Distortion") {
-                    return <span key={idx}>{r.input} </span>;
-                  }
-
-                  // Otherwise, show highlighted with color
                   return (
                     <span
                       key={idx}
-                      className={`${color} cursor-pointer rounded px-1`}
+                      className={`${color || ""} cursor-pointer rounded px-1`}
                       onMouseEnter={() =>
                         setHoveredInfo({
                           type: distortionType,
@@ -130,7 +125,7 @@ export default function Home() {
                   );
                 })}
               </div>
-            )}
+            }
           </div>
           {hoveredInfo && (
             <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded">
