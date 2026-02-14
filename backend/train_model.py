@@ -5,6 +5,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report, accuracy_score, confusion_matrix
 import joblib
+import re
 import numpy as np
 from database import (
     get_training_feedback,
@@ -19,21 +20,50 @@ kaggle_df = pd.read_csv("cognitive_distortion_dataset.csv")
 # Drop empty rows and any without a dominant distortion label
 kaggle_df = kaggle_df.dropna(subset=["Patient Question", "Dominant Distortion"])
 
-# Store this in the primary df
-df = kaggle_df
+# load augmented data (AI-genereated)
+augmented_df = pd.read_csv("augmented_data.csv")
+
+
+
+
+# Split into no distortion vs distortion
+no_distortion = kaggle_df[kaggle_df["Dominant Distortion"]== "No Distortion"]
+has_distortion = kaggle_df[kaggle_df["Dominant Distortion"] != "No Distortion"]
+
+# for distortion rows, just grab the distorted sentence
+has_distortion_clean = has_distortion[["Distorted part", "Dominant Distortion"]]
+has_distortion_clean.columns = ["text", "label"]
+
+# for no distortion, split each paragraph into sentences
+no_distortion_sentences = []
+for _, row in no_distortion.iterrows():
+    sentences = re.split(r'(?<=[.!?])\s+', row["Patient Question"].strip())
+    for sentence in sentences:
+        if sentence.strip():
+            no_distortion_sentences.append({"text": sentence.strip(), "label": "No Distortion"})
+
+no_distortion_clean = pd.DataFrame(no_distortion_sentences)
+# Downsample "No Distortion" to ~400 to mitigate class imbalance
+no_distortion_downsampled = no_distortion_clean.sample(n=400, random_state=42)
+
+# Store this downsample + rest of data in the primary df
+kaggle_clean_df = pd.concat([has_distortion_clean, no_distortion_downsampled])
+
+# combine with augmented data
+df = pd.concat([kaggle_clean_df, augmented_df])
 
 # Load user feedback
 feedback_data = get_training_feedback()
 if len(feedback_data) > 0:
     feedback_df = pd.DataFrame(
-        feedback_data, columns=["Patient Question", "Dominant Distortion"]
+        feedback_data, columns=["text", "label"]
     )
-    df = pd.concat([kaggle_df, feedback_df])
+    df = pd.concat([df, feedback_df])
 
 
 # Prepare features and labels
-X = df["Patient Question"]
-y = df["Dominant Distortion"]
+X = df["text"]
+y = df["label"]
 
 # Train/test split
 X_train, X_test, y_train, y_test = train_test_split(
