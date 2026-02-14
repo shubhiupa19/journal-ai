@@ -13,6 +13,7 @@ export default function Home() {
 
   const [error, setError] = useState("");
   const [feedbackError, setFeedbackError] = useState("");
+  
 
   const analyzeText = async () => {
     // Reset state before new analysis

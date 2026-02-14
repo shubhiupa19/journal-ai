@@ -4,18 +4,32 @@ import joblib
 import traceback
 import re
 from database import save_feedback, init_db
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+import os
+
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for frontend requests
+CORS(app, origins=["https://journal-ai-zeta.vercel.app","http://localhost:3000"])  # Enable CORS for frontend requests
+
+# creating a limiter object to reduce the amount of requests made to our API routes
+limiter = Limiter(get_remote_address, app=app)
+
+# preventing content over 16kb
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024
 
 # initalize db on startup of the backend
 init_db()
+
+# get API key for cross checking with frontend requests
+API_KEY = os.environ.get("API_KEY")
 
 # Load the trained model
 model = joblib.load("distortion_model.pkl")
 
 # route to call the model and predict CD's for each sentence
 @app.route("/predict", methods=["POST"])
+@limiter.limit("20 per minute")
 def predict():
     try:
         data = request.get_json()
@@ -23,6 +37,8 @@ def predict():
 
         if not input_text:
             return jsonify({"error": "Missing input text"}), 400
+        elif len(input_text.strip()) > 5000:
+            return jsonify({"error": "Text is too long, please enter a shorter message" }), 400
 
         # Split text into sentences (same logic as frontend expects)
         sentences = re.split(r'(?<=[.!?])\s+', input_text.strip())
@@ -51,9 +67,15 @@ def predict():
 
 # route to post feedback to our SQL db
 @app.route("/feedback", methods=["POST"])
+@limiter.limit("10 per minute")
 def feedback():
     try:
+        request_key = request.headers.get("X-API-Key")
+        if request_key != API_KEY:
+            return jsonify({"error": "Unauthorized"}), 401
         data = request.get_json()
+        if len(data.get("text", "").strip()) > 500:
+            return jsonify({"error": "Sentence is too long for feedback"}), 400
         feedback_id = save_feedback(
             text=data.get("text"),
             predicted_distortion=data.get("predicted_distortion"),
