@@ -1,12 +1,11 @@
 import sqlite3
-from datetime import datetime
 
 DATABASE_PATH = "feedback.db"
 
 
-def init_db():
+def init_db(path=DATABASE_PATH):
     # create a connection to the db
-    conn = sqlite3.connect(DATABASE_PATH)
+    conn = sqlite3.connect(path)
 
     # create cursor
     cursor = conn.cursor()
@@ -42,8 +41,8 @@ def init_db():
     conn.close()
 
 
-def save_feedback(text, predicted_distortion, user_correction, is_accepted, confidence):
-    conn = sqlite3.connect(DATABASE_PATH)
+def save_feedback(text, predicted_distortion, user_correction, is_accepted, confidence, path=DATABASE_PATH) -> int:
+    conn = sqlite3.connect(path)
     cursor = conn.cursor()
 
     # add data point to feedback table
@@ -64,8 +63,8 @@ def save_feedback(text, predicted_distortion, user_correction, is_accepted, conf
     return feedback_id
 
 
-def retrieve_feedback():
-    conn = sqlite3.connect(DATABASE_PATH)
+def retrieve_feedback(path=DATABASE_PATH):
+    conn = sqlite3.connect(path)
     cursor = conn.cursor()
 
     cursor.execute(""" SELECT * FROM feedback """)
@@ -77,8 +76,8 @@ def retrieve_feedback():
     return table
 
 
-def get_training_feedback():
-    conn = sqlite3.connect(DATABASE_PATH)
+def get_training_feedback(path=DATABASE_PATH):
+    conn = sqlite3.connect(path)
     cursor = conn.cursor()
     cursor.execute(
         """ SELECT text, user_correction FROM feedback WHERE is_accepted IS FALSE AND used_in_training IS FALSE"""
@@ -91,8 +90,8 @@ def get_training_feedback():
     return table
 
 
-def mark_used_feedback():
-    conn = sqlite3.connect(DATABASE_PATH)
+def mark_used_feedback(path=DATABASE_PATH):
+    conn = sqlite3.connect(path)
     cursor = conn.cursor()
     cursor.execute(
         """ UPDATE feedback SET used_in_training=TRUE WHERE is_accepted=FALSE and used_in_training=FALSE"""
@@ -101,8 +100,8 @@ def mark_used_feedback():
     conn.close()
 
 
-def save_model_version(version_number, training_samples, accuracy, notes):
-    conn = sqlite3.connect(DATABASE_PATH)
+def save_model_version(version_number, training_samples, accuracy, notes, path=DATABASE_PATH):
+    conn = sqlite3.connect(path)
     cursor = conn.cursor()
 
     # add new version to model_versions table
@@ -123,8 +122,8 @@ def save_model_version(version_number, training_samples, accuracy, notes):
     return model_version_id
 
 
-def get_latest_version():
-    conn = sqlite3.connect(DATABASE_PATH)
+def get_latest_version(path=DATABASE_PATH):
+    conn = sqlite3.connect(path)
     cursor = conn.cursor()
     cursor.execute(""" SELECT MAX(version_number) FROM model_versions """)
     version_number = cursor.fetchone()
