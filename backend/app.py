@@ -25,7 +25,7 @@ init_db()
 API_KEY = os.environ.get("API_KEY")
 
 # Load the trained model
-model = joblib.load("distortion_model.pkl")
+model = joblib.load(os.path.join(os.path.dirname(__file__), "distortion_model.pkl"))
 
 # route to call the model and predict CD's for each sentence
 @app.route("/predict", methods=["POST"])

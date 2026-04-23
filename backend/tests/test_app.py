@@ -1,0 +1,51 @@
+import pytest
+import os
+import sys
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+
+
+os.environ["API_KEY"] = "test-key"  # set before app loads                                                                                           
+                                                                                                                                                       
+from app import app                                                                                                                                  
+                  
+@pytest.fixture
+def client():
+    app.config["TESTING"] = True
+    with app.test_client() as client:                                                                                                                
+        yield client
+                                                                                                                                                       
+def test_predict_returns_results(client):                                                                                                            
+    response = client.post(
+        "/predict",                                                                                                                                  
+        json={"text": "I always fail at everything I do."}
+      )
+    
+    assert response.status_code == 200
+    result = response.get_json()
+    assert "results" in result                                                                                                                                                
+      # YOUR CODE HERE: assert status code is 200
+      # YOUR CODE HERE: assert "results" key is in response JSON                                                                                       
+      # Hint: response.get_json() gives you the parsed JSON body
+                                                                                                                                                       
+def test_predict_missing_text_returns_400(client):
+    response = client.post("/predict", json={"text": ""})                                                                                            
+
+    assert response.status_code == 400                                                                                                                                 
+   
+def test_feedback_without_api_key_returns_401(client):                                                                                               
+    response = client.post(
+          "/feedback",                                                                                                                                 
+          json={"text": "I always fail", "predicted_distortion": "Overgeneralization", "is_accepted": True, "confidence": 0.8}
+      )                                                                                                                                                
+
+    assert response.status_code == 401
+                                                                                                                                                       
+def test_feedback_with_api_key_returns_feedback_id(client):                                                                                          
+    response = client.post(
+        "/feedback",                                                                                                                                 
+        json={"text": "I always fail", "predicted_distortion": "Overgeneralization", "is_accepted": True, "confidence": 0.8},
+        headers={"X-API-Key": "test-key"}                                                                                                            
+    )
+
+    result = response.get_json()
+    assert isinstance(result["feedback_id"], int)    
