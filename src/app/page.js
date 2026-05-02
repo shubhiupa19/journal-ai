@@ -15,6 +15,10 @@ export default function Home() {
   const [error, setError] = useState("");
   const [feedbackError, setFeedbackError] = useState("");
 
+  // Rewrite UI state + error
+  const [rewritten, setRewritten] = useState(null);
+  const [rewriteError, setRewriteError] = useState(null);
+
   const analyzeText = async () => {
     // Reset state before new analysis
     setResult(null);
@@ -77,10 +81,35 @@ export default function Home() {
     }
   };
 
+  const rewrite = async () => {
+    setRewriteError(null);
+    const distortions = result.results;
+    const url = "api/rewrite";
+
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          text: text,
+          distortions: distortions,
+        }),
+      });
+      const data = await res.json()
+      setRewritten(data['rewritten'])
+
+    } catch (error) {
+      console.error(`Error with creating rewrite: ${error.message}`);
+      setRewriteError("Failed to create rewrite. Please try again")
+    }
+  };
+
   return (
     <>
       <header className="flex justify-end items-center gap-2 px-4 pt-4">
-        <span className="text-sm text-stone-500">{isDarkMode ? "Dark 🌙" : "Light ☀️"}</span>
+        <span className="text-sm text-stone-500">
+          {isDarkMode ? "Dark 🌙" : "Light ☀️"}
+        </span>
         <button
           onClick={() => {
             document.documentElement.classList.toggle("dark");
@@ -116,12 +145,34 @@ export default function Home() {
         >
           {text.length}/5000
         </p>
-        <button
-          onClick={analyzeText}
-          className="bg-olive-green text-white px-6 py-2.5 rounded-lg font-medium hover:bg-olive-green-dark transition-colors shadow-sm"
-        >
-          {loading ? "Analyzing..." : "Analyze"}
-        </button>
+         {rewritten && (
+            <div className="mt-6 mb-6 p-4 rounded-xl border-2 border-stone-200 dark:border-stone-700 bg-stone050 dark:bg-stone-800"> 
+            <h2 className="font-semibold text-stone-700 dark:text-stone-300 mb-2">Rewritten Entry</h2>
+            <p className="text-stone-600 dark:text-stone-400">{rewritten}</p>
+            </div>
+          )}
+        <div className="flex justify-between items-center">
+          <button
+            onClick={analyzeText}
+            className="bg-olive-green text-white px-6 py-2.5 rounded-lg font-medium hover:bg-olive-green-dark transition-colors shadow-sm"
+          >
+            {loading ? "Analyzing..." : "Analyze"}
+          </button>
+          <button
+            disabled={!result}
+            onClick={rewrite}
+            className="bg-olive-green text-white px-6 py-2.5 rounded-lg font-medium hover:bg-olive-green-dark transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Rewrite with AI
+          </button>
+         
+        </div>
+         {rewriteError && (
+          <div className="bg-red-50 border border-red-200 text-red-800 rounded-xl mt-4 p-3 dark:bg-red-900 dark:border-red-700 dark:text-red-200">
+            {" "}
+            <p className="text-sm">{rewriteError}</p>{" "}
+          </div>
+        )}
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-800 rounded-xl mt-4 p-3 dark:bg-red-900 dark:border-red-700 dark:text-red-200">
             {" "}

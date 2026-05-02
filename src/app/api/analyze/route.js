@@ -10,12 +10,10 @@ export async function POST(request) {
 
   // then, we call the url of our python model
   const url = `${process.env.BACKEND_URL}/predict`;
-
-  const API_KEY = process.env.API_KEY;
-
+  
   const response = await fetch(url, {
     method: "POST",
-    headers: { "Content-Type": "application/json", "X-API-Key": API_KEY },
+    headers: { "Content-Type": "application/json", },
     body: JSON.stringify({ text }),
   });
 

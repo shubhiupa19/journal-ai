@@ -7,7 +7,9 @@ from database import save_feedback, init_db
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 import os
-
+import google.generativeai as genai                                                                                                                                                                                                                                 
+from dotenv import load_dotenv
+load_dotenv(".env.local")
 
 app = Flask(__name__)
 CORS(app, origins=["https://journal-ai-zeta.vercel.app","http://localhost:3000"])  # Enable CORS for frontend requests
@@ -90,5 +92,36 @@ def feedback():
 
     return (jsonify({"feedback_id": feedback_id}))
 
+# route to call the Gemini API to rewrite the journal entry in a healthier way
+@app.route('/rewrite', methods=['POST'])
+def rewrite():
+    try:
+        data = request.get_json()
+        # 1. extract text and distortions
+        text = data["text"]
+        distortions = data["distortions"]
+        distortion_lines = "\n".join(
+            f'"{d["input"]}" → {d["prediction"]} ({d["confidence"]})'
+            for d in distortions
+        )
+        # 2. build the prompt       
+        prompt = f""" You are a therapist specializing in cognitive behavioral therapy.                                                                                    
+        The following journal entry has been analyzed for cognitive distortions.
+                                                                                                                                                        
+        Original entry:
+        {text}                                                                                                                                               
+                    
+        Detected distortions by sentence:                                                                                                                    
+        {distortion_lines}
+                                                                                                                                                        
+        Rewrite the full journal entry with healthier thought patterns, preserving the original meaning and tone.
+        Return only the rewritten entry, with no explanation or commentary."""                                                                                                                     
+    # 3. call Gemini
+        gemini_model = genai.GenerativeModel("gemini-3-flash-preview")
+        response = gemini_model.generate_content(prompt) 
+    # 4. return the result 
+        return jsonify({ "rewritten": response.text }) 
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
