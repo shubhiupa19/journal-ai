@@ -124,5 +124,47 @@ def rewrite():
         return jsonify({ "rewritten": response.text }) 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+@app.route('/agent', methods=["POST"])
+def agent():
+    tools = [
+        {
+            "name": "analyze_text",
+            "description": "Analyzes text for cognitive distortions sentence by sentence",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "text": {
+                        "type": "string",
+                        "description": "The journal entry text to analyze"
+                    }
+                },
+                "required": ["text"]
+            }
+        },
+        {
+            "name": "rewrite_text",
+            "description": "Rewrite distorted text in a healthier way using Gemini API",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "text": {"type": "string", "description": "The journal entry text"},
+                    "distortions": {
+                        "type": "array",
+                        "description": "List of detected distortions",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "input": {"type": "string"},
+                                "prediction": {"type": "string"},
+                                "confidence": {"type": "number"}
+                            }
+                        }
+                    }
+                },
+                "required": ["text", "distortions"]
+            }
+        }
+    ]
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
