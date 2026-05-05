@@ -1,6 +1,6 @@
 # Reframe - AI Journaling App and Cognitive Distortion Analyzer
 
-1 in 5 adults experience a mental health condition each year. Therapy helps — but it's expensive, inaccessible, and happens once a week. The other 167 hours each week are unexamined.
+1 in 5 adults experience a mental health condition each year. Therapy helps, but it's expensive, inaccessible, and happens once a week. The other 167 hours each week are unexamined.
 
 **Reframe** brings a core CBT technique into your daily writing: automatically detecting the negative thought patterns (cognitive distortions) that fuel anxiety and depression, sentence by sentence, as you write.
 
@@ -29,7 +29,7 @@ Each sentence is highlighted and color-coded by distortion type with confidence 
 
 ## Why it matters
 
-Cognitive distortions are automatic. That's the problem — they don't feel like distortions, they feel like facts. This tool makes the invisible visible, creating the kind of self-awareness that CBT therapists spend sessions trying to build.
+Cognitive distortions are automatic. That's the problem; they don't feel irrational, they feel like facts. This tool makes the invisible *visible*, creating the kind of self-awareness that CBT therapists spend sessions trying to build.
 
 Built at the intersection of NLP and clinical psychology, this project is an exploration of what accessible, AI-assisted mental health tooling could look like.
 
@@ -78,7 +78,7 @@ This is an actively developed project. Upcoming:
 
 ## Current limitations
 
-The model uses TF-IDF vectorization which captures word frequency but not semantic context. Classification accuracy is ~34% on the held-out test set — best treated as a journaling aid that surfaces patterns for reflection, not a clinical diagnostic tool. The transformer upgrade (roadmap item 1) addresses this directly.
+The model uses TF-IDF vectorization, which captures word frequency but not semantic context. Classification accuracy is ~34% on the held-out test set — best treated as a journaling aid that surfaces patterns for reflection, not a clinical diagnostic tool. The transformer upgrade (roadmap item 1) addresses this directly.
 
 ---
 
@@ -88,4 +88,4 @@ Cognitive distortions were first described by psychiatrist Aaron Beck in the 196
 
 ---
 
-*Built by [Shubhi Upadhyay](https://github.com/shubhiupa19) — CS + Psychology, NYU '25*
+*Built by [Shubhi Upadhyay](https://github.com/shubhiupa19) — CS + Psychology, NYU '26*
