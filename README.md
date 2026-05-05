@@ -1,6 +1,6 @@
 # AI Journaling App – Cognitive Distortion Analyzer
 
-This is a journaling web app that helps users become more aware of their negative thinking patterns. It uses a **machine learning model** to detect **cognitive distortions** like Overgeneralization, Mind Reading, and All-or-Nothing Thinking.
+Nearly 1 in 5 American adults experiences a mental illness each year. Therapy helps, but it's expensive, inaccessible, and typically only happens once a week. The other 167 hours in the week are left unexamined.
 
 Built with [Next.js 13+ (App Router)](https://nextjs.org/) frontend and a Flask backend powered by scikit-learn.
 
