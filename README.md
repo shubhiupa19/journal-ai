@@ -2,6 +2,8 @@
 
 Nearly 1 in 5 American adults experiences a mental illness each year. Therapy helps, but it's expensive, inaccessible, and typically only happens once a week. The other 167 hours in the week are left unexamined.
 
+**Reframe** brings a core CBT technique into your daily writing: automatically detecting the negative thought patterns (cognitive distortions) that fuel anxiety and depression, sentence by sentence, as you write.
+
 Built with [Next.js 13+ (App Router)](https://nextjs.org/) frontend and a Flask backend powered by scikit-learn.
 
 ---
