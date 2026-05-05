@@ -78,7 +78,9 @@ This is an actively developed project. Upcoming:
 
 ## Current limitations
 
-The model uses TF-IDF vectorization, which captures word frequency but not semantic context. Classification accuracy is ~34% on the held-out test set — best treated as a journaling aid that surfaces patterns for reflection, not a clinical diagnostic tool. The transformer upgrade (roadmap item 1) addresses this directly.
+The model uses TF-IDF vectorization, which captures word frequency but not semantic context.   
+Classification accuracy is ~34% on the held-out test set — best treated as a journaling aid that surfaces patterns for reflection, not a clinical diagnostic tool.   
+The transformer upgrade (roadmap item 1) addresses this directly.
 
 ---
 
