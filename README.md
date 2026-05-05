@@ -1,134 +1,91 @@
-# AI Journaling App – Cognitive Distortion Analyzer
+# Reframe - AI Journaling App and Cognitive Distortion Analyzer
 
-Nearly 1 in 5 American adults experiences a mental illness each year. Therapy helps, but it's expensive, inaccessible, and typically only happens once a week. The other 167 hours in the week are left unexamined.
+1 in 5 adults experience a mental health condition each year. Therapy helps — but it's expensive, inaccessible, and happens once a week. The other 167 hours each week are unexamined.
 
 **Reframe** brings a core CBT technique into your daily writing: automatically detecting the negative thought patterns (cognitive distortions) that fuel anxiety and depression, sentence by sentence, as you write.
 
-Built with [Next.js 13+ (App Router)](https://nextjs.org/) frontend and a Flask backend powered by scikit-learn.
+---
+
+## What it does
+
+Paste or type a journal entry. The app splits it into sentences and classifies each one against 10 clinically-recognized cognitive distortions from CBT:
+
+| Distortion | Example |
+|---|---|
+| All-or-Nothing Thinking | "I always mess everything up" |
+| Overgeneralization | "Nobody ever listens to me" |
+| Mind Reading | "She probably thinks I'm incompetent" |
+| Fortune-telling | "This is never going to work out" |
+| Emotional Reasoning | "I feel like a failure, so I must be one" |
+| Labeling | "I'm such an idiot" |
+| Should Statements | "I should be further along by now" |
+| Mental Filtering | "The whole day was ruined" |
+| Disqualifying the Positive | "That went well, but it was just luck" |
+| Personalization | "It's my fault they're upset" |
+
+Each sentence is highlighted and color-coded by distortion type with confidence scores. Hover to see definitions.
 
 ---
 
-## Features
+## Why it matters
 
-- Type or paste in a journal entry
-- Automatically splits your entry into individual sentences
-- Detects the **most likely cognitive distortion** per sentence
-- Shows predictions with confidence scores
-- Color-coded highlighting for each distortion type
-- Hover over highlighted text to see distortion definitions
-- Real-time predictions using a locally-trained ML model
+Cognitive distortions are automatic. That's the problem — they don't feel like distortions, they feel like facts. This tool makes the invisible visible, creating the kind of self-awareness that CBT therapists spend sessions trying to build.
+
+Built at the intersection of NLP and clinical psychology, this project is an exploration of what accessible, AI-assisted mental health tooling could look like.
 
 ---
 
-## Getting Started
+## Tech stack
 
-### 1. Clone this repo
+**Frontend:** Next.js 13+ (App Router), React, Tailwind CSS  
+**Backend:** Flask, scikit-learn, pandas  
+**Model:** TF-IDF + Logistic Regression pipeline trained on 2,530 labeled examples  
+**Dataset:** [Cognitive Distortion Detection Dataset](https://www.kaggle.com/) — 11 classes, 80/20 stratified split
+
+---
+
+## Getting started
+
 ```bash
+# Clone the repo
 git clone https://github.com/shubhiupa19/journal-ai.git
 cd journal-ai
-```
 
-### 2. Install Python dependencies
-```bash
+# Backend setup
 cd backend
 pip install flask flask-cors scikit-learn pandas joblib
-```
+python train_model.py   # trains and saves distortion_model.pkl
+python app.py           # runs on http://127.0.0.1:5000
 
-### 3. Train the model
-```bash
-cd backend
-python train_model.py
-```
-This will train a Logistic Regression classifier on the cognitive distortion dataset and save it as `distortion_model.pkl`.
-
-### 4. Start the Flask backend
-```bash
-cd backend
-python app.py
-```
-The API will run on `http://127.0.0.1:5000`
-
-### 5. Install frontend dependencies
-```bash
-# In a new terminal, from the project root
+# Frontend setup (new terminal)
 npm install
+npm run dev             # runs on http://localhost:3000
 ```
 
-### 6. Run the Next.js frontend
-```bash
-npm run dev
-```
-Open [http://localhost:3000](http://localhost:3000) in your browser.
-
 ---
-## Model Info
 
-This app uses a **scikit-learn Pipeline** with:
-- **TF-IDF Vectorization** (unigrams + bigrams, 5000 max features)
-- **Logistic Regression** classifier with balanced class weights
+## Roadmap
 
-### Dataset
-- **2,530 labeled examples** from the [Cognitive Distortion Detection Dataset on Kaggle](https://www.kaggle.com/datasets/sagarikashreevastava/cognitive-distortion-detetction-dataset)
-- **11 classes** including 10 cognitive distortions + "No Distortion"
-- 80/20 train-test split with stratification
-- Dataset also includes therapist responses (not currently used but available for future improvements)
+This is an actively developed project. Upcoming:
 
-### Cognitive Distortions Detected
-
-1. **All-or-Nothing Thinking** - Thinking in absolutes like "always," "never," or "every"
-2. **Overgeneralization** - Drawing broad conclusions from single events
-3. **Emotional Reasoning** - Believing feelings reflect reality
-4. **Labeling** - Assigning negative labels to yourself or others
-5. **Should Statements** - Rigid rules about how things "should" be
-6. **Mind Reading** - Assuming you know what others are thinking
-7. **Disqualifying the Positive** - Dismissing positive experiences
-8. **Mental Filtering** - Focusing only on negatives
-9. **Fortune-telling** - Predicting negative outcomes without evidence
-10. **Personalization** - Taking responsibility for things outside your control
-11. **No Distortion** - Healthy, balanced thinking
-
-### Model Performance
-- **Accuracy: ~34%** on the test set
-- The model performs best on "No Distortion" (majority class)
-- Performance is limited by class imbalance and dataset size
-- Best used as a journaling aid rather than clinical diagnosis
-
-The model analyzes each sentence independently and returns a prediction with a confidence score.
-
----
-## Future AI Improvements
-
-The original Kaggle dataset includes therapist responses and CBT-style reframes. Future versions could leverage this to:
-
-1. ** Generate therapeutic reframes** - Fine-tune an LLM (GPT, Llama, Claude) on the patient-therapist pairs to provide personalized CBT responses
-   - Example: "I always fail" → "You've succeeded at many things. Setbacks are part of learning and growth."
-
-2. ** Multi-task learning** - Train a model to simultaneously classify distortions AND generate helpful reframes, improving both tasks
-
-3. ** Improve classification accuracy** - Experiment with transformer models (BERT, RoBERTa) or collect more balanced training data to boost performance beyond 34%
+- **Transformer upgrade** — replacing TF-IDF + LR with fine-tuned DistilBERT/RoBERTa for context-aware classification (target: 60%+ accuracy)
+- **Agentic reframing** — tool-use layer that generates CBT-style reframes for flagged sentences using the therapist response data in the original dataset
+- **Memory + personalization** — tracking distortion patterns over time to surface recurring thought patterns
+- **ReAct reasoning** — multi-step agent that selects interventions based on distortion type and severity
+- **Session history** — persistent journaling with longitudinal pattern analysis
 
 ---
 
-## Why This Matters
-Cognitive distortions are automatic, negative thought patterns that reinforce anxiety, depression, and self-doubt. This tool helps you catch those thoughts in real time — and eventually reframe them.
+## Current limitations
+
+The model uses TF-IDF vectorization which captures word frequency but not semantic context. Classification accuracy is ~34% on the held-out test set — best treated as a journaling aid that surfaces patterns for reflection, not a clinical diagnostic tool. The transformer upgrade (roadmap item 1) addresses this directly.
 
 ---
 
-## Tech Stack
+## Background
 
-**Frontend Frameworks and Libraries:**
-- Next.js 13+ (App Router)
-- React
-- Tailwind CSS
-- react-highlight-words
-
-**Backend Frameworks and Libraries:**
-- Flask 
-- scikit-learn 
-- pandas 
-- joblib 
+Cognitive distortions were first described by psychiatrist Aaron Beck in the 1960s and are a cornerstone of Cognitive Behavioral Therapy. The 10 distortion types detected here are based on Beck's original framework as expanded by David Burns in *Feeling Good* (1980).
 
 ---
 
-## Note
-Built as a personal learning project to explore ML classification with scikit-learn and Next.js. Runs locally with Flask backend + Next.js frontend.
+*Built by [Shubhi Upadhyay](https://github.com/shubhiupa19) — CS + Psychology, NYU '25*
