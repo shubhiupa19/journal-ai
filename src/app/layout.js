@@ -1,19 +1,13 @@
-import { Inter } from "next/font/google";
-import { Playfair_Display } from "next/font/google";
-import { Nunito } from "next/font/google";
-import { Lora } from "next/font/google";  
-import { EB_Garamond } from "next/font/google";  
+
+
+import { Figtree } from "next/font/google";
+import { Instrument_Serif } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
 
-const font = Playfair_Display({ subsets: ["latin"] });
+const figtree = Figtree({ subsets: ["latin"] , variable: "--font-figtree",});
 
-const nunito = Nunito({ subsets: ["latin"] });
-
-const lora = Lora({subsets: ["latin"]})
-
-const eb_garamond = EB_Garamond({subsets: ["latin"]})
+const instrument_serif = Instrument_Serif({ subsets: ["latin"], weight: "400", variable: "--font-instrument-serif",   });
 
 export const metadata = {
   title: "AI Cognitive Distortion Analyzer",
@@ -23,7 +17,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${eb_garamond.className} dark:bg-gray-900`}>{children}</body>
+      <body className={`${figtree.variable} ${instrument_serif.variable} dark:bg-gray-900`}>
+        {children}
+      </body>
     </html>
   );
 }
