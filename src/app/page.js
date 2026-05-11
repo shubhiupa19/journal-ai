@@ -125,10 +125,7 @@ export default function Home() {
           style={{ fontFamily: "var(--font-instrument-serif)" }}
         >
           Reframe
-          <span
-            className="inline-block w-1.5 h-1.5 rounded-full bg-primary relative ml-1"
-            style={{ top: -8 }}
-          />
+          <span className="inline-block text-primary pl-2 mt-1 text-xl">{"\u2737"}</span>
         </span>
         <Button
           variant="outline"
@@ -285,8 +282,14 @@ export default function Home() {
               total={distortedResults.length}
               current={activeStep}
               direction={stepDirection}
-              onPrev={() => { setStepDirection("prev"); setActiveStep(activeStep - 1); }}
-              onNext={() => { setStepDirection("next"); setActiveStep(activeStep + 1); }}
+              onPrev={() => {
+                setStepDirection("prev");
+                setActiveStep(activeStep - 1);
+              }}
+              onNext={() => {
+                setStepDirection("next");
+                setActiveStep(activeStep + 1);
+              }}
               sendFeedback={sendFeedback}
               feedbackSubmitted={feedbackSubmitted}
             />
@@ -339,7 +342,7 @@ export default function Home() {
       </main>
 
       <footer className="text-center px-6 py-8 text-[13px] italic text-muted-foreground">
-        Reframe is a journaling aid, not a clinical tool (~35% accuracy). Your
+        Reframe is a journaling aid, not a clinical tool (~50% accuracy). Your
         feedback helps improve predictions over time.
       </footer>
     </>

@@ -1,12 +1,11 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.pipeline import Pipeline
-from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
+from sentence_transformers import SentenceTransformer   
 from sklearn.metrics import classification_report, accuracy_score, confusion_matrix
 import joblib
 import re
-import numpy as np
+
 from database import (
     get_training_feedback,
     mark_used_feedback,
@@ -22,9 +21,6 @@ kaggle_df = kaggle_df.dropna(subset=["Patient Question", "Dominant Distortion"])
 
 # load augmented data (AI-genereated)
 augmented_df = pd.read_csv("augmented_data.csv")
-
-
-
 
 # Split into no distortion vs distortion
 no_distortion = kaggle_df[kaggle_df["Dominant Distortion"]== "No Distortion"]
@@ -65,46 +61,36 @@ if len(feedback_data) > 0:
 X = df["text"]
 y = df["label"]
 
+# load the encoder and encode everything (important for embeddings vs simple TF)
+encoder = SentenceTransformer("all-MiniLM-L6-v2")
+X_encoded = encoder.encode(X.tolist(), show_progress_bar=True)
+
 # Train/test split
 X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42
+    X_encoded, y, test_size=0.2, random_state=42
 )
 
-# Build pipeline for ML: TF-IDF + Logistic Regression Model
-pipeline = Pipeline(
-    [
-        # first step in the pipeline is creating feature vectors using TF-IDF
-        (
-            "tfidf",
-            TfidfVectorizer(
-                stop_words="english",
-                ngram_range=(
-                    1,
-                    2,
-                ),  # only use unigrams and bigrams, which are often more informative for text classification tasks than all possible combinations of words
-                max_features=5000,  # reduce the vocabulary size, which can increase accuracy because it reduces noise from less informative words
-                min_df=2,  # skip terms that appear in less than 2 documents, since they are too rare to be useful
-                max_df=0.8,  # skip terms that appear in more than 80% of documents, since they aren't indicative of specific distortion types
-            ),
-        ),
-        # second step in the pipeline is feeding the vectors to a Logistic Regression classifier
-        # so that we can get probability estimates on the test data
-        # we are also using class_weight='balanced' to handle any class imbalance, which occurs when classes (types of distortions) are not equally represented in the dataset
-        # this imbalance is problematic because the model may become biased towards the majority class (No Distortion in this case) and perform poorly on minority classes
-        # we are also setting max_iter to 1000 to ensure convergence, which means the model has enough iterations to find the optimal solution
-        # we are also using regularization, which reduces weights on specific words that aren't indicative of a particular distortion type
-        # lastly, we are using the lbfgs sovler to find the optimal weights for the LR model
-        (
-            "clf",
-            LogisticRegression(
-                max_iter=1000,
-                class_weight="balanced",
-                C=1.0,  # Regularization strength
-                solver="lbfgs",  # Better solver for multiclass
-            ),
-        ),
-    ]
-)
+# Train a Logistic Regression classifier on top of the sentence embeddings.
+# Instead of TF-IDF word frequency vectors, LogReg now receives 384-dimensional
+# semantic embeddings from the SentenceTransformer encoder — this means sentences
+# with similar meanings will have similar input vectors, giving LogReg much richer
+# signal to learn from than raw word counts.
+# class_weight='balanced' handles class imbalance — without it, the model would
+# over-predict common classes (like "No Distortion") and ignore rare ones.
+# max_iter=1000 ensures the solver has enough iterations to converge on optimal weights.
+# C=1.0 is the regularization strength — it penalizes overly large weights so the
+# model doesn't over-fit to quirks in the training data.
+# lbfgs is the solver algorithm used to find those optimal weights — well suited for
+# multiclass problems with dense input like our 384-dimensional embeddings.
+pipeline = LogisticRegression(
+      max_iter=1000,
+      class_weight="balanced",
+      C=1.0,
+      solver="lbfgs",
+  )
+    
+    
+
 
 # fit the model to the training data
 pipeline.fit(X_train, y_train)

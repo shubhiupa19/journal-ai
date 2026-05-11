@@ -27,17 +27,29 @@ export default function StepperCard({
   return (
     <div
       className="rounded-xl border border-border bg-card p-5"
-      style={{ animation: `${direction === "next" ? "revealRight" : "revealLeft"} 0.35s cubic-bezier(0.23,1,0.32,1) both ` }}
+      style={{
+        animation: `${direction === "next" ? "revealRight" : "revealLeft"} 0.35s cubic-bezier(0.23,1,0.32,1) both `,
+      }}
     >
       <div className="flex items-center justify-between mb-3">
         <span className="text-sm text-muted-foreground tabular-nums">
           {current + 1} of {total}
         </span>
         <div className="flex gap-1">
-          <Button variant="outline" size="icon-sm" disabled={current === 0} onClick={onPrev}>
+          <Button
+            variant="outline"
+            size="icon-sm"
+            disabled={current === 0}
+            onClick={onPrev}
+          >
             ←
           </Button>
-          <Button variant="outline" size="icon-sm" disabled={current === total - 1} onClick={onNext}>
+          <Button
+            variant="outline"
+            size="icon-sm"
+            disabled={current === total - 1}
+            onClick={onNext}
+          >
             →
           </Button>
         </div>
@@ -52,7 +64,10 @@ export default function StepperCard({
 
       <p
         className="text-xl leading-relaxed my-3 pl-4 text-foreground"
-        style={{ fontFamily: "var(--font-instrument-serif)", borderLeft: `3px solid ${d.underline}` }}
+        style={{
+          fontFamily: "var(--font-instrument-serif)",
+          borderLeft: `3px solid ${d.underline}`,
+        }}
       >
         {result.text}
       </p>
@@ -62,7 +77,15 @@ export default function StepperCard({
           variant="outline"
           size="sm"
           onClick={() => setShowDef(!showDef)}
-          style={showDef ? { background: "var(--accent-faint)", color: "var(--accent-light)", borderColor: "var(--accent-muted)" } : {}}
+          style={
+            showDef
+              ? {
+                  background: "var(--accent-faint)",
+                  color: "var(--accent-light)",
+                  borderColor: "var(--accent-muted)",
+                }
+              : {}
+          }
         >
           {showDef ? "Hide ↗" : "What is this? ↗"}
         </Button>
@@ -76,16 +99,33 @@ export default function StepperCard({
         ) : (
           <>
             <button
-              onClick={() => { sendFeedback(result.originalIdx, true); setFb("up"); setSubmitted(true); }}
-              className="w-8 h-8 rounded-md cursor-pointer text-sm transition-opacity"
-              style={{ opacity: fb === "up" ? 1 : 0.4, background: fb === "up" ? "var(--accent-faint)" : "transparent", border: "none" }}
+              onClick={() => {
+                sendFeedback(result.originalIdx, true);
+                setFb("up");
+                setSubmitted(true);
+              }}
+              className={`w-8 h-8 rounded-md cursor-pointer text-sm transition-all hover:bg-muted ${
+                fb === "up" ? "bg-[var(--accent-faint)]" : "bg-transparent"
+              }`}
+              style={{
+                opacity: fb === "up" ? 1 : 0.4,
+                border: "none",
+              }}
             >
               👍
             </button>
             <button
-              onClick={() => { setFb("down"); setCorrecting(true); }}
-              className="w-8 h-8 rounded-md cursor-pointer text-sm transition-opacity"
-              style={{ opacity: fb === "down" ? 1 : 0.4, background: fb === "down" ? "#FFF5F5" : "transparent", border: "none" }}
+              onClick={() => {
+                setFb("down");
+                setCorrecting(true);
+              }}
+              className={`w-8 h-8 rounded-md cursor-pointer text-sm transition-all hover:bg-muted ${
+                fb === "down" ? "bg-[var(--accent-faint)]" : "bg-transparent"
+              }`}
+              style={{
+                opacity: fb === "down" ? 1 : 0.4,
+                border: "none",
+              }}
             >
               👎
             </button>
@@ -96,7 +136,11 @@ export default function StepperCard({
       {showDef && (
         <div
           className="mt-4 p-4 rounded-lg border"
-          style={{ background: "var(--accent-faint)", borderColor: "var(--accent-muted)", animation: "fadeIn 0.2s ease" }}
+          style={{
+            background: "var(--accent-faint)",
+            borderColor: "var(--accent-muted)",
+            animation: "fadeIn 0.2s ease",
+          }}
         >
           <span
             className="text-[10px] font-bold uppercase tracking-widest block mb-2"
@@ -114,8 +158,13 @@ export default function StepperCard({
       )}
 
       {correcting && !submitted && (
-        <div className="mt-3 flex gap-2 items-center flex-wrap" style={{ animation: "fadeIn 0.2s ease" }}>
-          <span className="text-sm text-muted-foreground">What distortion is this?</span>
+        <div
+          className="mt-3 flex gap-2 items-center flex-wrap"
+          style={{ animation: "fadeIn 0.2s ease" }}
+        >
+          <span className="text-sm text-muted-foreground">
+            What distortion is this?
+          </span>
           <select
             value={correction}
             onChange={(e) => setCorrection(e.target.value)}
@@ -123,13 +172,20 @@ export default function StepperCard({
           >
             <option value="">Choose...</option>
             {DISTORTION_ORDER.map((d) => (
-              <option key={d} value={d}>{d}</option>
+              <option key={d} value={d}>
+                {d}
+              </option>
             ))}
           </select>
           <Button
             size="sm"
             disabled={!correction}
-            onClick={() => { if (correction) { sendFeedback(result.originalIdx, false, correction); setSubmitted(true); } }}
+            onClick={() => {
+              if (correction) {
+                sendFeedback(result.originalIdx, false, correction);
+                setSubmitted(true);
+              }
+            }}
           >
             Submit
           </Button>
@@ -141,7 +197,11 @@ export default function StepperCard({
           <div
             key={i}
             className="rounded-full transition-all duration-300"
-            style={{ width: i === current ? 18 : 6, height: 6, background: i === current ? "var(--primary)" : "var(--border)" }}
+            style={{
+              width: i === current ? 18 : 6,
+              height: 6,
+              background: i === current ? "var(--primary)" : "var(--border)",
+            }}
           />
         ))}
       </div>

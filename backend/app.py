@@ -6,8 +6,9 @@ import re
 from database import save_feedback, init_db
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+from sentence_transformers import SentenceTransformer
 import os
-import google.generativeai as genai                                                                                                                                                                                                                                 
+import google.generativeai as genai                                                                                                                                                                                                                              
 from dotenv import load_dotenv
 load_dotenv(".env.local")
 genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
@@ -30,6 +31,9 @@ API_KEY = os.environ.get("API_KEY")
 # Load the trained model
 model = joblib.load(os.path.join(os.path.dirname(__file__), "distortion_model.pkl"))
 
+# Load the encoder from Hugging Face
+encoder = SentenceTransformer('all-MiniLM-L6-v2')
+
 # route to call the model and predict CD's for each sentence
 @app.route("/predict", methods=["POST"])
 @limiter.limit("20 per minute")
@@ -47,18 +51,20 @@ def predict():
         sentences = re.split(r'(?<=[.!?])\s+', input_text.strip())
         sentences = [s.strip() for s in sentences if s.strip()]
 
+        # create embeddings from the input sentences
+        embeddings = encoder.encode(sentences)
         # Make predictions for each sentence
         results = []
-        for sentence in sentences:
-            prediction = model.predict([sentence])[0]
-            probs = model.predict_proba([sentence])[0]
+        for i in range (len(sentences)):
+            prediction = model.predict([embeddings[i]])[0]
+            probs = model.predict_proba([embeddings[i]])[0]
 
             # Get confidence for the predicted class
             class_index = list(model.classes_).index(prediction)
             confidence = float(probs[class_index])
 
             results.append({
-                "input": sentence,
+                "input": sentences[i],
                 "prediction": prediction,
                 "confidence": round(confidence, 3)
             })
