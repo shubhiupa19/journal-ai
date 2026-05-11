@@ -167,7 +167,7 @@ export default function Home() {
             animation: "revealUp 0.5s cubic-bezier(0.23,1,0.32,1) 0.2s both",
           }}
         >
-          Write freely. We'll help you spot patterns in your thinking.
+          Write freely. The tool will help you spot patterns in your thinking.
         </p>
 
         {mode === "write" && (
