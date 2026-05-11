@@ -19,6 +19,7 @@ export default function Home() {
   const [feedbackSubmitted, setFeedbackSubmitted] = useState({});
   const [error, setError] = useState("");
   const [activeStep, setActiveStep] = useState(0);
+  const [stepDirection, setStepDirection] = useState("next");
   const [rewriteLoading, setRewriteLoading] = useState(false);
   const [rewritten, setRewritten] = useState(null);
   const [rewriteError, setRewriteError] = useState(null);
@@ -209,16 +210,6 @@ export default function Home() {
                 {loading ? "Analyzing..." : "Analyze →"}
               </Button>
             )}
-            {mode === "review" && (
-              <Button
-                variant="outline"
-                className="py-5 px-4"
-                onClick={rewrite}
-                disabled={rewriteLoading}
-              >
-                {rewriteLoading ? "Rewriting..." : "Rewrite with AI ✦"}
-              </Button>
-            )}
           </div>
         </div>
 
@@ -266,19 +257,62 @@ export default function Home() {
         )}
 
         {mode === "review" && (
-          <div className="flex justify-end mt-2">
-            <Button variant="outline" size="sm" onClick={backToEdit}>
+          <div className="flex justify-end gap-2 mt-2">
+            <Button
+              variant="outline"
+              className="py-5 px-4"
+              onClick={backToEdit}
+            >
               ← Edit text
+            </Button>
+            <Button
+              variant="outline"
+              className="py-5 px-4"
+              onClick={rewrite}
+              disabled={rewriteLoading}
+            >
+              {rewriteLoading ? "Rewriting..." : "Rewrite with AI ✦"}
             </Button>
           </div>
         )}
 
+        {mode === "review" && distortedResults.length > 0 && (
+          <div className="mt-4">
+            <StepperCard
+              key={distortedResults[activeStep].id}
+              result={distortedResults[activeStep]}
+              dark={isDarkMode}
+              total={distortedResults.length}
+              current={activeStep}
+              direction={stepDirection}
+              onPrev={() => { setStepDirection("prev"); setActiveStep(activeStep - 1); }}
+              onNext={() => { setStepDirection("next"); setActiveStep(activeStep + 1); }}
+              sendFeedback={sendFeedback}
+              feedbackSubmitted={feedbackSubmitted}
+            />
+          </div>
+        )}
+
+        {mode === "review" && result && distortedResults.length === 0 && (
+          <div
+            className="mt-6 p-5 rounded-xl border"
+            style={{
+              background: "var(--accent-faint)",
+              borderColor: "var(--accent-muted)",
+            }}
+          >
+            <p
+              className="text-[17px] text-foreground m-0"
+              style={{ fontFamily: "var(--font-instrument-serif)" }}
+            >
+              No distortions detected — your thinking looks balanced here.
+            </p>
+          </div>
+        )}
         {rewritten && (
           <div
-            className="mt-5 p-5 rounded-xl border"
+            className="mt-5 p-5 rounded-xl border border-border bg-card"
             style={{
-              background: "var(--primary)11",
-              borderColor: "var(--primary)33",
               animation: "revealUp 0.4s cubic-bezier(0.23,1,0.32,1) both",
             }}
           >
@@ -300,39 +334,6 @@ export default function Home() {
         {rewriteError && (
           <div className="mt-4 p-3 rounded-xl bg-red-50 border border-red-200 text-red-800 text-sm dark:bg-red-900 dark:border-red-700 dark:text-red-200">
             {rewriteError}
-          </div>
-        )}
-
-        {mode === "review" && distortedResults.length > 0 && (
-          <div className="mt-6">
-            <StepperCard
-              key={distortedResults[activeStep].id}
-              result={distortedResults[activeStep]}
-              dark={isDarkMode}
-              total={distortedResults.length}
-              current={activeStep}
-              onPrev={() => setActiveStep(activeStep - 1)}
-              onNext={() => setActiveStep(activeStep + 1)}
-              sendFeedback={sendFeedback}
-              feedbackSubmitted={feedbackSubmitted}
-            />
-          </div>
-        )}
-
-        {mode === "review" && result && distortedResults.length === 0 && (
-          <div
-            className="mt-6 p-5 rounded-xl border"
-            style={{
-              background: "var(--accent-faint)",
-              borderColor: "var(--accent-muted)",
-            }}
-          >
-            <p
-              className="text-[17px] text-foreground m-0"
-              style={{ fontFamily: "var(--font-instrument-serif)" }}
-            >
-              No distortions detected — your thinking looks balanced here.
-            </p>
           </div>
         )}
       </main>

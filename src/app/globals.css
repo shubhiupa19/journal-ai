@@ -77,6 +77,28 @@ body {
   }
 }
 
+@keyframes revealLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes revealRight {
+  from {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -103,7 +125,7 @@ body {
   --accent-light: #40916C;
   --accent-faint: #D8F3DC;
   --accent-muted: #B7E4C7;
-  --card: #FAF8F5;
+  --card: #fffefb;
   --card-foreground: #1B1B18;
   --popover: #FAF8F5;
   --popover-foreground: #1B1B18;

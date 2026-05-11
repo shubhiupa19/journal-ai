@@ -13,6 +13,7 @@ export default function StepperCard({
   current,
   onPrev,
   onNext,
+  direction,
   sendFeedback,
   feedbackSubmitted,
 }) {
@@ -26,7 +27,7 @@ export default function StepperCard({
   return (
     <div
       className="rounded-xl border border-border bg-card p-5"
-      style={{ animation: "revealUp 0.35s cubic-bezier(0.23,1,0.32,1) both" }}
+      style={{ animation: `${direction === "next" ? "revealRight" : "revealLeft"} 0.35s cubic-bezier(0.23,1,0.32,1) both ` }}
     >
       <div className="flex items-center justify-between mb-3">
         <span className="text-sm text-muted-foreground tabular-nums">
