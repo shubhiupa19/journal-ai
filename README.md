@@ -37,10 +37,10 @@ Built at the intersection of NLP and clinical psychology, this project is an exp
 
 ## Tech stack
 
-**Frontend:** Next.js 13+ (App Router), React, Tailwind CSS  
-**Backend:** Flask, scikit-learn, pandas  
-**Model:** TF-IDF + Logistic Regression pipeline trained on 2,530 labeled examples  
-**Dataset:** [Cognitive Distortion Detection Dataset](https://www.kaggle.com/) — 11 classes, 80/20 stratified split
+**Frontend:** Next.js 16 (App Router), React 19, Tailwind CSS v4  
+**Backend:** Flask, scikit-learn, sentence-transformers, pandas  
+**Model:** `all-MiniLM-L6-v2` sentence embeddings + Logistic Regression trained on ~3,500 labeled examples  
+**Dataset:** [Cognitive Distortion Detection Dataset](https://www.kaggle.com/) + AI-augmented samples — 11 classes, 80/20 stratified split
 
 ---
 
@@ -53,7 +53,7 @@ cd journal-ai
 
 # Backend setup
 cd backend
-pip install flask flask-cors scikit-learn pandas joblib
+pip install -r requirements.txt
 python train_model.py   # trains and saves distortion_model.pkl
 python app.py           # runs on http://127.0.0.1:5000
 
@@ -68,8 +68,8 @@ npm run dev             # runs on http://localhost:3000
 
 This is an actively developed project. Upcoming:
 
-- **Transformer upgrade** — replacing TF-IDF + LR with fine-tuned DistilBERT/RoBERTa for context-aware classification (target: 60%+ accuracy)
-- **Agentic reframing** — tool-use layer that generates CBT-style reframes for flagged sentences using the therapist response data in the original dataset
+- **Fine-tuned transformer** — fine-tuning DistilBERT/RoBERTa for context-aware classification (target: 65%+ accuracy)
+- **Agentic reframing** — tool-use layer that generates CBT-style reframes for flagged sentences using therapist response data from the original dataset
 - **Memory + personalization** — tracking distortion patterns over time to surface recurring thought patterns
 - **ReAct reasoning** — multi-step agent that selects interventions based on distortion type and severity
 - **Session history** — persistent journaling with longitudinal pattern analysis
@@ -78,9 +78,7 @@ This is an actively developed project. Upcoming:
 
 ## Current limitations
 
-The model uses TF-IDF vectorization, which captures word frequency but not semantic context.   
-Classification accuracy is ~34% on the held-out test set — best treated as a journaling aid that surfaces patterns for reflection, not a clinical diagnostic tool.   
-The transformer upgrade (roadmap item 1) addresses this directly.
+Classification accuracy is ~50% on the held-out test set — best treated as a journaling aid that surfaces patterns for reflection, not a clinical diagnostic tool. Some distortion types (Magnification, Overgeneralization) are harder to distinguish and score lower individually.
 
 ---
 
