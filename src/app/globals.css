@@ -97,15 +97,15 @@ body {
 }
 
 :root {
-  --background: #FCFCFB;
+  --background: #FAF8F5;
   --foreground: #1B1B18;
   --foreground-soft: #4A4A45;
   --accent-light: #40916C;
   --accent-faint: #D8F3DC;
   --accent-muted: #B7E4C7;
-  --card: #FCFCFB;
+  --card: #FAF8F5;
   --card-foreground: #1B1B18;
-  --popover: #FCFCFB;
+  --popover: #FAF8F5;
   --popover-foreground: #1B1B18;
   --primary: #2D6A4F;
   --primary-foreground: #ffffff;
