@@ -14,7 +14,7 @@ load_dotenv(".env.local")
 genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
 
 app = Flask(__name__)
-CORS(app, origins=["https://journal-ai-zeta.vercel.app","http://localhost:3000"])  # Enable CORS for frontend requests
+CORS(app, origins=["https://reframe-journal.vercel.app/","http://localhost:3000"])  # Enable CORS for frontend requests
 
 # creating a limiter object to reduce the amount of requests made to our API routes
 limiter = Limiter(get_remote_address, app=app)
