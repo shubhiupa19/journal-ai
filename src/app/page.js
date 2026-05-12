@@ -210,7 +210,7 @@ export default function Home() {
                   <Button
                     className="py-5 px-4"
                     onClick={analyzeText}
-                    disabled={!text || loading }
+                    disabled={!text || loading}
                   >
                     {loading ? "Analyzing..." : "Analyze →"}
                   </Button>
@@ -326,7 +326,7 @@ export default function Home() {
               className="text-[17px] text-foreground m-0"
               style={{ fontFamily: "var(--font-instrument-serif)" }}
             >
-              No distortions detected — your thinking looks balanced here.
+              No distortions detected. Your thinking looks balanced here.
             </p>
           </div>
         )}
