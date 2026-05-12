@@ -31,8 +31,14 @@ API_KEY = os.environ.get("API_KEY")
 # Load the trained model
 model = joblib.load(os.path.join(os.path.dirname(__file__), "distortion_model.pkl"))
 
-# Load the encoder from Hugging Face
-encoder = SentenceTransformer('all-MiniLM-L6-v2')
+# Encoder is loaded lazily on first request to avoid OOM on Render free tier startup
+encoder = None
+
+def get_encoder():
+    global encoder
+    if encoder is None:
+        encoder = SentenceTransformer('all-MiniLM-L6-v2')
+    return encoder
 
 # route to call the model and predict CD's for each sentence
 @app.route("/predict", methods=["POST"])
@@ -52,7 +58,7 @@ def predict():
         sentences = [s.strip() for s in sentences if s.strip()]
 
         # create embeddings from the input sentences
-        embeddings = encoder.encode(sentences)
+        embeddings = get_encoder().encode(sentences)
         # Make predictions for each sentence
         results = []
         for i in range (len(sentences)):
@@ -176,7 +182,7 @@ def agent():
 
 @app.route('/health', methods=["GET"])
 def health():
-    encoder.encode(["warmup"])
+    get_encoder().encode(["warmup"])
     return jsonify({"status": "ok"})
 
 
