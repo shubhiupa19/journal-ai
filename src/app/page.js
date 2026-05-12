@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { DIST_STYLES, SAMPLE_TEXT } from "@/app/constants/distStyles";
 import HighlightedText from "@/components/HighlightedText";
@@ -117,6 +117,12 @@ export default function Home() {
   const distortedResults = result
     ? result.filter((r) => r.dist !== "No Distortion" && DIST_STYLES[r.dist])
     : [];
+
+  useEffect(() => {
+    fetch("api/health", {
+      method: "GET",
+    })
+  }, []);
 
   return (
     <>

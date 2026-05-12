@@ -5,7 +5,7 @@ export async function POST(request) {
   // extracting the body of the request
   const body = await request.json();
 
-  // specifically, pulls out they value from the key-val pair of "text" in the body
+  // specifically, pulls out the value from the key-val pair of "text" in the body
   const { text } = body;
 
   // then, we call the url of our python model
