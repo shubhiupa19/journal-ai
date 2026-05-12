@@ -31,7 +31,7 @@ export const DISTORTION_DATA = {
   },
   "Fortune-telling": {
     definition:
-      "Predicting negative outcomes without adequate evidence",
+      "Predicting negative outcomes with inadequate evidence",
   },
   Magnification: {
     definition:

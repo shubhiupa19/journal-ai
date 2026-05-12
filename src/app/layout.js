@@ -11,8 +11,8 @@ const figtree = Figtree({ subsets: ["latin"] , variable: "--font-figtree",});
 const instrument_serif = Instrument_Serif({ subsets: ["latin"], weight: "400", variable: "--font-instrument-serif",   });
 
 export const metadata = {
-  title: "AI Cognitive Distortion Analyzer",
-  description: "Identify negative thinking patterns",
+  title: "Reframe",
+  description: "Identify and change negative thinking patterns",
 };
 
 export default function RootLayout({ children }) {

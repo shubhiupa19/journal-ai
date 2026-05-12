@@ -133,6 +133,10 @@ export default function StepperCard({
         )}
       </div>
 
+      <p className="text-[11px] text-muted-foreground mt-2">
+        Feedback is anonymous and only used to improve the model.
+      </p>
+
       {showDef && (
         <div
           className="mt-4 p-4 rounded-lg border"

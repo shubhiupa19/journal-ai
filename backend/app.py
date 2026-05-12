@@ -175,6 +175,7 @@ def agent():
 
 @app.route('/health', methods=["GET"])
 def health():
+    encoder.encode(["warmup"])
     return jsonify({"status": "ok"})
 
 
