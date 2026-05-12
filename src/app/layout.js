@@ -2,6 +2,7 @@
 
 import { Figtree } from "next/font/google";
 import { Instrument_Serif } from "next/font/google";
+import { Analytics } from '@vercel/analytics/next';
 import "./globals.css";
 
 
@@ -19,6 +20,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`${figtree.variable} ${instrument_serif.variable} dark:bg-gray-900`}>
         {children}
+         <Analytics />
       </body>
     </html>
   );

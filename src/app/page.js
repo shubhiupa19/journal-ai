@@ -8,6 +8,7 @@ import Tooltip from "@/components/Tooltip";
 import StepperCard from "@/components/StepperCard";
 import { FaMoon } from "react-icons/fa";
 import { IoSunnyOutline } from "react-icons/io5";
+import { Analytics } from '@vercel/analytics/react';
 
 export default function Home() {
   const [isDarkMode, setIsDarkMode] = useState(false);
