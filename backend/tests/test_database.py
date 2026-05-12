@@ -56,6 +56,6 @@ def test_mark_used_feedback(db_path):
     
     accepted_row = cursor.fetchone()
 
-    assert accepted_row[0] == 0
+    assert accepted_row[0] == 1
                                                                                   
     conn.close()

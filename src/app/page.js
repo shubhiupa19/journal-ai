@@ -119,9 +119,7 @@ export default function Home() {
     : [];
 
   useEffect(() => {
-    fetch("api/health", {
-      method: "GET",
-    }).then(() => setBackendReady(true));
+    fetch("api/health").then(() => setBackendReady(true));
   }, []);
 
   return (
