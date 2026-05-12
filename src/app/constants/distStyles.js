@@ -12,4 +12,4 @@ export const DIST_STYLES = {
 };
 
 export const SAMPLE_TEXT =
-  "I always mess everything up. My friend didn't text back, so they must be angry with me. I should have handled that situation perfectly. I'll never be good enough no matter how hard I try.";
+  "I always mess everything up. My friend didn't text back, so they must be angry with me. I should know what I want to do with my life by now. I'll never be good enough no matter how hard I try.";
