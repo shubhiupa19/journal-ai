@@ -94,7 +94,7 @@ export default function StepperCard({
 
         {feedbackSubmitted[result.originalIdx] ? (
           <p className="text-sm" style={{ color: "var(--accent-light)" }}>
-            ✓ Thanks — your feedback helps the model improve.
+            ✓ Thanks! your feedback helps the model improve.
           </p>
         ) : (
           <>
