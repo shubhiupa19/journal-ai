@@ -125,15 +125,16 @@ export default function Home() {
   return (
     <>
       <nav className="sticky top-0 z-50 flex items-center justify-between px-6 py-3.5 border-b border-border bg-background/80 backdrop-blur-lg">
-        <span
-          className="text-[22px] text-foreground"
+        <a
+          href="/"
+          className="text-[22px] text-foreground no-underline"
           style={{ fontFamily: "var(--font-instrument-serif)" }}
         >
           Reframe
           <span className="inline-block text-primary pl-2 mt-1 text-xl">
             {"\u2737"}
           </span>
-        </span>
+        </a>
         <Button
           variant="outline"
           size="lg"
