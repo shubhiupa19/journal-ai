@@ -8,7 +8,6 @@ import Tooltip from "@/components/Tooltip";
 import StepperCard from "@/components/StepperCard";
 import { FaMoon } from "react-icons/fa";
 import { IoSunnyOutline } from "react-icons/io5";
-import { Analytics } from '@vercel/analytics/react';
 
 export default function Home() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -24,6 +23,7 @@ export default function Home() {
   const [rewriteLoading, setRewriteLoading] = useState(false);
   const [rewritten, setRewritten] = useState(null);
   const [rewriteError, setRewriteError] = useState(null);
+  const [backendReady, setBackendReady] = useState(false);
 
   const analyzeText = async () => {
     setResult(null);
@@ -121,7 +121,7 @@ export default function Home() {
   useEffect(() => {
     fetch("api/health", {
       method: "GET",
-    })
+    }).then(() => setBackendReady(true));
   }, []);
 
   return (
@@ -132,7 +132,9 @@ export default function Home() {
           style={{ fontFamily: "var(--font-instrument-serif)" }}
         >
           Reframe
-          <span className="inline-block text-primary pl-2 mt-1 text-xl">{"\u2737"}</span>
+          <span className="inline-block text-primary pl-2 mt-1 text-xl">
+            {"\u2737"}
+          </span>
         </span>
         <Button
           variant="outline"
@@ -191,9 +193,7 @@ export default function Home() {
           <span
             className={`text-[13px] tabular-nums ${text.length > 4500 ? "text-red-500" : "text-muted-foreground"}`}
           >
-            {mode === "write"
-              ? `${text.length.toLocaleString()} / 5,000`
-              : `${distortedResults.length} distortion${distortedResults.length === 1 ? "" : "s"} found`}
+            {mode === "write" && `${text.length.toLocaleString()} / 5,000`}
           </span>
           <div className="flex gap-2">
             {mode === "write" && text && (
@@ -206,13 +206,22 @@ export default function Home() {
               </Button>
             )}
             {mode === "write" && (
-              <Button
-                className="py-5 px-4"
-                onClick={analyzeText}
-                disabled={!text || loading}
-              >
-                {loading ? "Analyzing..." : "Analyze →"}
-              </Button>
+              <>
+                {backendReady && (
+                  <Button
+                    className="py-5 px-4"
+                    onClick={analyzeText}
+                    disabled={!text || loading }
+                  >
+                    {loading ? "Analyzing..." : "Analyze →"}
+                  </Button>
+                )}
+                {!backendReady && (
+                  <p className="text-[12px] text-muted-foreground">
+                    Warming up...
+                  </p>
+                )}
+              </>
             )}
           </div>
         </div>
@@ -261,27 +270,30 @@ export default function Home() {
         )}
 
         {mode === "review" && (
-          <div className="flex justify-end gap-2 mt-2">
-            <Button
-              variant="outline"
-              className="py-5 px-4"
-              onClick={backToEdit}
-            >
-              ← Edit text
-            </Button>
-            <Button
-              variant="outline"
-              className="py-5 px-4"
-              onClick={rewrite}
-              disabled={rewriteLoading}
-            >
-              {rewriteLoading ? "Rewriting..." : "Rewrite with AI ✦"}
-            </Button>
-          </div>
+          <>
+            <div className="flex justify-end gap-2 mt-2">
+              <Button
+                variant="outline"
+                className="py-5 px-4"
+                onClick={backToEdit}
+              >
+                ← Edit text
+              </Button>
+              <Button
+                variant="outline"
+                className="py-5 px-4"
+                onClick={rewrite}
+                disabled={rewriteLoading}
+              >
+                {rewriteLoading ? "Rewriting..." : "Rewrite with AI ✦"}
+              </Button>
+            </div>
+            <span className="text-[13px] text-muted-foreground">{`${distortedResults.length} distortion${distortedResults.length === 1 ? "" : "s"} found`}</span>
+          </>
         )}
 
         {mode === "review" && distortedResults.length > 0 && (
-          <div className="mt-4">
+          <div className="mt-2">
             <StepperCard
               key={distortedResults[activeStep].id}
               result={distortedResults[activeStep]}

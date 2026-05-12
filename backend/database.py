@@ -94,7 +94,7 @@ def mark_used_feedback(path=DATABASE_PATH):
     conn = sqlite3.connect(path)
     cursor = conn.cursor()
     cursor.execute(
-        """ UPDATE feedback SET used_in_training=TRUE WHERE is_accepted=FALSE and used_in_training=FALSE"""
+        "UPDATE feedback SET used_in_training=TRUE WHERE used_in_training=FALSE"
     )
     conn.commit()
     conn.close()

@@ -63,11 +63,12 @@ def predict():
             class_index = list(model.classes_).index(prediction)
             confidence = float(probs[class_index])
 
-            results.append({
-                "input": sentences[i],
-                "prediction": prediction,
-                "confidence": round(confidence, 3)
-            })
+            if confidence > 0.2:
+                results.append({
+                    "input": sentences[i],
+                    "prediction": prediction,
+                    "confidence": round(confidence, 3)
+                })
 
         return jsonify({"results": results})
 
